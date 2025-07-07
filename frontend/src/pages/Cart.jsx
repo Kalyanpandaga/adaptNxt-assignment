@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
+import toast, { Toaster } from "react-hot-toast";
+
+const SHIPPING_COST = 10;
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [placing, setPlacing] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const fetchCart = async () => {
     setLoading(true);
+    setError("");
     try {
       const res = await api.get("/cart");
       setCart(res.data.cart);
@@ -22,32 +27,93 @@ const Cart = () => {
     fetchCart();
   }, []);
 
-  const handleRemove = async (productTitle) => {
-    const item = cart.find((c) => c.product.title === productTitle);
-    if (!item) return;
+  const updateQuantity = async (productId, quantity) => {
+    if (quantity < 1) return;
     try {
-      await api.delete(`/cart/${item.product.title}`);
+      await api.post("/cart", { productId, quantity });
       fetchCart();
     } catch {
-      window.toast && window.toast.error("Failed to remove item");
+      setError("Failed to update quantity");
+    }
+  };
+
+  const handleRemove = async (productId) => {
+    try {
+      await api.delete(`/cart/${productId}`);
+      fetchCart();
+    } catch {
+      setError("Failed to remove item");
     }
   };
 
   const handlePlaceOrder = async () => {
     setPlacing(true);
+    setSuccess("");
+    setError("");
     try {
       await api.post("/orders");
-      window.toast && window.toast.success("Order placed!");
+      setSuccess("Order placed!");
+      toast.success(
+        <div className="text-center">
+          <div className="font-bold text-lg">Congratulations!</div>
+          <div>Your order is placed successfully.</div>
+        </div>,
+        {
+          style: {
+            borderRadius: "12px",
+            background: "#18181b",
+            color: "#fff",
+            boxShadow: "0 4px 24px 0 #6366f1",
+            fontSize: "1rem",
+            padding: "1.2rem 1.5rem",
+          },
+          iconTheme: {
+            primary: "#22c55e",
+            secondary: "#fff",
+          },
+          position: "center",
+          duration: 4000,
+        }
+      );
       fetchCart();
     } catch {
-      window.toast && window.toast.error("Failed to place order");
+      setError("Failed to place order");
+      toast.error(
+        <div className="text-center">
+          <div className="font-bold text-lg">Order Failed</div>
+          <div>Something went wrong. Please try again.</div>
+        </div>,
+        {
+          style: {
+            borderRadius: "12px",
+            background: "#18181b",
+            color: "#fff",
+            boxShadow: "0 4px 24px 0 #ef4444",
+            fontSize: "1rem",
+            padding: "1.2rem 1.5rem",
+          },
+          iconTheme: {
+            primary: "#ef4444",
+            secondary: "#fff",
+          },
+          position: "center",
+          duration: 4000,
+        }
+      );
     }
     setPlacing(false);
   };
 
+  const subtotal = cart.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+  const total = subtotal + (cart.length > 0 ? SHIPPING_COST : 0);
+
   return (
-    <div className="container mx-auto px-2">
-      <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+    <div className="max-w-2xl mx-auto p-4">
+      <Toaster position="center" />
+      <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
       {loading ? (
         <div className="flex justify-center items-center h-40">
           <span className="loading loading-spinner loading-lg"></span>
@@ -58,32 +124,87 @@ const Cart = () => {
         <div className="alert alert-info">Your cart is empty.</div>
       ) : (
         <>
-          <ul className="divide-y">
-            {cart.map((item, idx) => (
-              <li key={idx} className="flex items-center justify-between py-3">
-                <div>
-                  <span className="font-semibold">{item.product.title}</span>{" "}
-                  <span className="text-gray-500">x{item.quantity}</span>
-                  <span className="ml-2">₹{item.product.price}</span>
+          <div className="flex flex-col gap-6">
+            {cart.map((item) => (
+              <div
+                key={item.product._id}
+                className="card card-side bg-base-100 shadow flex flex-row items-center p-4"
+              >
+                <img
+                  src={item.product.imageUrl}
+                  alt={item.product.title}
+                  className="w-24 h-24 object-contain rounded-lg border"
+                />
+                <div className="flex-1 ml-6">
+                  <div className="font-bold text-lg mb-1">
+                    {item.product.title}
+                  </div>
+                  <div className="text-gray-500 mb-2">
+                    ₹{item.product.price.toFixed(2)}
+                  </div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <button
+                      className="btn btn-sm btn-circle btn-outline"
+                      onClick={() =>
+                        updateQuantity(item.product._id, item.quantity - 1)
+                      }
+                      aria-label="Decrease quantity"
+                    >
+                      -
+                    </button>
+                    <span className="px-2 text-lg font-semibold">
+                      {item.quantity}
+                    </span>
+                    <button
+                      className="btn btn-sm btn-circle btn-outline"
+                      onClick={() =>
+                        updateQuantity(item.product._id, item.quantity + 1)
+                      }
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <button
+                    className="btn btn-link text-error p-0 min-h-0 h-auto"
+                    onClick={() => handleRemove(item.product._id)}
+                  >
+                    Remove
+                  </button>
                 </div>
-                <button
-                  className="btn btn-error btn-xs"
-                  onClick={() => handleRemove(item.product.title)}
-                >
-                  Remove
-                </button>
-              </li>
+                <div className="text-xl font-bold ml-4">
+                  ₹{(item.product.price * item.quantity).toFixed(2)}
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
+          <div className="divider"></div>
+          <div className="flex flex-col gap-2 text-lg">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>₹{subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Shipping</span>
+              <span>
+                ₹{cart.length > 0 ? SHIPPING_COST.toFixed(2) : "0.00"}
+              </span>
+            </div>
+            <div className="flex justify-between font-bold text-xl">
+              <span>Total</span>
+              <span>₹{total.toFixed(2)}</span>
+            </div>
+          </div>
+          {success && <div className="alert alert-success mt-2">{success}</div>}
           <button
-            className="btn btn-primary mt-6"
+            className="btn btn-primary w-full mt-6"
+            disabled={cart.length === 0 || placing}
             onClick={handlePlaceOrder}
-            disabled={placing}
           >
             {placing ? (
               <span className="loading loading-spinner"></span>
             ) : (
-              "Place Order"
+              "Proceed to Checkout"
             )}
           </button>
         </>

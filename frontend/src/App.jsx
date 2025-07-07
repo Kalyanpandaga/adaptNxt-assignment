@@ -6,9 +6,9 @@ import Login from "./pages/Login";
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
-import AdminProducts from "./pages/AdminProducts";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import ProductDetails from "./pages/ProductDetails";
 
 const App = () => (
   <AuthProvider>
@@ -19,6 +19,7 @@ const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
           <Route
             path="/cart"
             element={
@@ -32,14 +33,6 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Orders />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/products"
-            element={
-              <ProtectedRoute requiredRole="ADMIN">
-                <AdminProducts />
               </ProtectedRoute>
             }
           />

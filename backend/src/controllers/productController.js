@@ -32,6 +32,7 @@ exports.getProducts = async (req, res) => {
         brand: p.brand,
         price: p.price,
         imageUrl: p.image_url,
+        description: p.description,
         rating: p.rating?.rate || 0,
         category: p.category,
         availability: p.availability,

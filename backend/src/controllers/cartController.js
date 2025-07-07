@@ -13,8 +13,10 @@ exports.getCart = async (req, res) => {
     }
     const cartItems = cart.items.map((item) => ({
       product: {
+        _id: item.productId._id,
         title: item.productId.title,
         price: item.productId.price,
+        imageUrl: item.productId.image_url,
       },
       quantity: item.quantity,
     }));

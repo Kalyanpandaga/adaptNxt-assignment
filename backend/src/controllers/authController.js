@@ -35,21 +35,11 @@ const login = async (req, res) => {
 
     const user = await User.findOne({ emailId });
     if (!user)
-      return errorResponse(
-        res,
-        401,
-        "LOGIN_ERROR",
-        "Invalid email or password"
-      );
+      return errorResponse(res, 401, "LOGIN_ERROR", "Invalid credintials");
 
     const isValid = await user.validatePassword(password);
     if (!isValid)
-      return errorResponse(
-        res,
-        401,
-        "LOGIN_ERROR",
-        "Invalid email or password"
-      );
+      return errorResponse(res, 401, "LOGIN_ERROR", "Invalid credintials");
 
     const token = await user.getJwt();
     res.json({

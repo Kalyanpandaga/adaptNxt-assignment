@@ -17,6 +17,9 @@ const Navbar = () => {
         <Link to="/" className="btn btn-ghost normal-case text-xl">
           shopLoom
         </Link>
+        {isAuthenticated && user?.role === "ADMIN" && (
+          <span className="badge badge-primary ml-2">Admin</span>
+        )}
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1 gap-2">
@@ -33,12 +36,9 @@ const Navbar = () => {
           )}
           {isAuthenticated && (
             <li>
-              <Link to="/orders">Orders</Link>
-            </li>
-          )}
-          {isAuthenticated && user?.role === "ADMIN" && (
-            <li>
-              <Link to="/admin/products">Admin Dashboard</Link>
+              <Link to="/orders">
+                {user?.role === "ADMIN" ? "All Orders" : "Orders"}
+              </Link>
             </li>
           )}
           {!isAuthenticated ? (
