@@ -14,6 +14,6 @@ if (!JWT_PRIVATE_KEY) {
   process.exit(1);
 }
 
-const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
+const allowedOrigin = process.env.FRONTEND_URL;
 
 module.exports = { JWT_PRIVATE_KEY, MONGO_URI, PORT, allowedOrigin };

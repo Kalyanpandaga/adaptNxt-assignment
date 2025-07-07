@@ -1,110 +1,107 @@
-# adaptNxt-assignment
+# AdaptNxt E-Commerce Assignment
 
-[GitHub Repository](https://github.com/Kalyanpandaga/adaptNxt-assignment)
+A full-stack e-commerce platform with modern best practices, featuring:
 
----
-
-## 🛒 E-Commerce Platform (Full Stack)
-
-A modern, full-stack e-commerce platform built with **Express.js + MongoDB** (backend) and **React + Vite + Tailwind CSS + DaisyUI** (frontend).
+- **Express.js + MongoDB** backend
+- **React + Vite + Tailwind CSS + DaisyUI** frontend
+- JWT authentication, role-based access, modular structure, and robust validation
 
 ---
 
-## 📦 Backend (Express.js + MongoDB)
+## 🚀 Live Demo
 
-### **Features**
+- **Frontend:** [https://adaptnxt-assignment-react.onrender.com](https://adaptnxt-assignment-react.onrender.com)
+- **Backend API Base URL:** [https://adaptnxt-assignment-backend.onrender.com/api](https://adaptnxt-assignment-backend.onrender.com/api)
 
-- **Authentication**: JWT-based login/signup, role-based access (Customer/Admin)
-- **Product Management**: CRUD for products, search, pagination, admin-only management
-- **Cart Management**: Add, update, remove products in cart (customer only)
-- **Order Management**: Place orders from cart, view orders (customer sees own, admin sees all)
-- **Input Validation**: Centralized, custom validators for all routes
-- **Error Handling**: Centralized error responses
-- **Modular Structure**: Controllers, routes, middleware, validations, models
+---
 
-### **How to Run Backend Locally**
+## 🧪 Testing Credentials
 
-1. **Install dependencies:**
+### Customer User
+
+- **Email:** `kalyan@gmail.com`
+- **Password:** `Kalyan@123`
+
+### Admin User
+
+- **Email:** `admin@shoploom.com`
+- **Password:** `Admin@1234`
+
+---
+
+## ✨ Features
+
+- User authentication (JWT, cookies)
+- Role-based access (Admin/Customer)
+- Product listing, filtering, and search
+- Product management (add/edit/delete) for Admin
+- Product details page with add-to-cart and admin controls
+- Shopping cart with quantity management
+- Order placement and paginated order history
+- Centralized validation and error handling
+- Responsive, modern UI with Tailwind CSS & DaisyUI
+- Toast notifications for all major actions
+- Modular, clean codebase (controllers, routes, models, middleware, context, components)
+
+---
+
+## 🛠️ How to Use Locally
+
+1. **Clone the repo:**
    ```bash
-   cd backend
-   npm install
+   git clone [github link](https://github.com/Kalyanpandaga/adaptNxt-assignment)
+   cd adaptNxt-assignment
    ```
-2. **Configure environment:**
-   - Set up your MongoDB connection string and JWT secret in `src/config/constants.js` or via environment variables.
-3. **Start the server:**
-   ```bash
-   npm start
-   ```
-   The backend will run on the port specified in your config (default: 5000).
+2. **Install dependencies:**
+   - Backend:
+     ```bash
+     cd backend
+     npm install
+     ```
+   - Frontend:
+     ```bash
+     cd ../frontend
+     npm install
+     ```
+3. **Set up environment variables**
+
+- backend
+
+  ```
+       MONGO_URI=<your mongoDB connection string>
+       JWT_PRIVATE_KEY=<your jwt private key>
+       PORT=<your port no>
+       FRONTEND_URL=<frontend deployed url>
+  ```
+
+  frontend
+
+  ```
+  VITE_BASE_URL=<your api's base url>
+
+  ```
+
+4. **Seed the database:**
+   - Run the product seeding script and create admin as needed.
+5. **Run locally:**
+   - Backend: `npm start` (default: http://localhost:5000)
+   - Frontend: `npm run dev` (default: http://localhost:5173)
 
 ---
 
-## 🎨 Frontend (React + Vite + Tailwind CSS + DaisyUI)
+## 📦 API Reference
 
-### **Features**
-
-- **Modern UI**: Responsive, mobile-friendly, styled with Tailwind CSS and DaisyUI
-- **Authentication**: Login/Signup with JWT, context-based auth, role-based route protection
-- **Product Browsing**: Public product grid, search, pagination, add to cart
-- **Cart**: View, update, remove items, place order (customer only)
-- **Orders**: View orders (customer: own, admin: all)
-- **Admin Dashboard**: Add, edit, delete products (admin only)
-- **Reusable Components**: Navbar, ProtectedRoute, forms, modals
-- **API Integration**: Axios with JWT from cookies, auto-attached to requests
-- **Validation & Feedback**: Form validation, loading spinners, error/success messages
-
-### **How to Run Frontend Locally**
-
-1. **Install dependencies:**
-   ```bash
-   cd frontend
-   npm install
-   ```
-2. **Start the dev server:**
-   ```bash
-   npm run dev
-   ```
-   The frontend will run on [http://localhost:5173](http://localhost:5173) by default.
-3. **API Proxy:**
-   - Ensure your Vite config proxies `/api` requests to your backend server (see `vite.config.js`).
+- All backend endpoints are prefixed with `/api`.
+- See `backend/src/routes/` for available routes and usage.
 
 ---
 
-## 📝 Folder Structure
+## 🧹 Best Practices & Clean Architecture
 
-```
-adaptNxt-assignment/
-├── backend/
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── routes/
-│   │   ├── models/
-│   │   ├── middleware/
-│   │   ├── utils/
-│   │   └── config/
-│   └── package.json
-├── frontend/
-│   ├── src/
-│   │   ├── api/
-│   │   ├── components/
-│   │   ├── context/
-│   │   ├── pages/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   └── package.json
-└── README.md
-```
+- Modular separation of concerns (controllers, routes, models, middleware, utils)
+- Centralized validation and error handling
+- Modern React with context, hooks, and modular components
+- Responsive, accessible UI
+- Secure authentication and role-based access
 
 ---
-
-## 🔗 Useful Links
-
-- **GitHub:** [https://github.com/Kalyanpandaga/adaptNxt-assignment](https://github.com/Kalyanpandaga/adaptNxt-assignment)
-- **Tailwind CSS Docs:** [https://tailwindcss.com/docs/installation/using-vite](https://tailwindcss.com/docs/installation/using-vite)
-- **DaisyUI Docs:** [https://daisyui.com/](https://daisyui.com/)
-
----
-
-## 🤝 Contributing
-
-Pull requests and suggestions are welcome!
